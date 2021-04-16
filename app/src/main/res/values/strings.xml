@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">Darkblock Viewer</string>
+
+    <!-- Sign in -->
+    <string name="welcome_1">To sign in, go to</string>
+    <string name="welcome_2">And enter this code:</string>
+    <string name="signin_url">dev1.darkblock.io</string>
+
+    <!-- Main menu -->
+    <string name="browse_title">Darkblock.io</string>
+    <string name="gallery">Gallery</string>
+    <string name="settings">Settings</string>
+    <string name="view_all">View All</string>
+    <string name="view_all_count">%d More Work(s)</string>
+    <string name="art_grid">All Works</string>
+    <string name="author_detail">By %s</string>
+
+    <!-- Art view -->
+    <string name="art_maximize">Decrypt &amp; Display</string>
+    <string name="art_maximize_unencrypted">Display Unencrypted Image</string>
+    <string name="cannot_decrypt">Unable to decrypt image</string>
+
+    <string name="status_decrypting">Decrypting your art…</string>
+    <string name="status_downloading">Decrypting your art…</string>
+
+    <string name="unknown_author">Unknown Author</string>
+    <string name="unknown_title">Unknown Title</string>
+
+    <!-- Settings strings -->
+    <string name="refresh">Refresh Collection</string>
+    <string name="sign_out">Sign Out</string>
+    
+    <!-- Errors -->
+    <string name="error_no_art_specified">No artwork was specified to be loaded</string>
+    <string name="error_no_key">Artwork is missing a decryption key</string>
+    <string name="error_http">Error grabbing or decrypting information</string>
+    <string name="error_image_processing">Unable to process image</string>
+
+</resources>

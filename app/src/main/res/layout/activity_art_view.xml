@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    tools:context=".activity.ArtViewActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <include
+            android:id="@+id/include2"
+            layout="@layout/toolbar"
+            android:layout_width="50dp"
+            android:layout_height="match_parent" />
+
+        <ImageView
+            android:id="@+id/previewImage"
+            android:layout_width="500dp"
+            android:layout_height="match_parent"
+            android:paddingStart="32dp"
+            android:paddingTop="32dp"
+            android:paddingBottom="96dp"
+            android:scaleType="fitCenter"
+            android:src="@drawable/default_background" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:paddingTop="48dp">
+
+            <TextView
+                android:id="@+id/artTitle"
+                android:layout_width="382dp"
+                android:layout_height="47dp"
+                android:layout_marginStart="24dp"
+                android:fontFamily="@font/avantgardestd_bold"
+                android:text="Name of Art"
+                android:textSize="36sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/artDetails"
+                android:layout_width="382dp"
+                android:layout_height="350dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/avantgardestd"
+                android:text="Details"
+                android:textSize="24sp" />
+
+            <Button
+                android:id="@+id/buttonMaximize"
+                android:layout_width="300dp"
+                android:layout_height="64dp"
+                android:layout_marginStart="64dp"
+                android:layout_marginEnd="64dp"
+                android:fontFamily="@font/omnes_regular"
+                android:text="@string/art_maximize"
+                android:textColor="@color/white"
+                android:background="@color/secondary_blue"
+                android:textSize="24sp" />
+        </LinearLayout>
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

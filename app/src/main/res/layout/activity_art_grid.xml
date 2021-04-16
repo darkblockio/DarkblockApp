@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/primary_dark"
+    android:focusable="false"
+    android:orientation="horizontal"
+    tools:context=".activity.MainActivity"
+    tools:deviceIds="tv"
+    tools:ignore="MergeRootFrame">
+
+    <include
+        android:id="@+id/include"
+        layout="@layout/toolbar"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/textView4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="48dp"
+            android:layout_marginTop="16dp"
+            android:fontFamily="@font/avantgardestd_bold"
+            android:text="@string/art_grid"
+            android:textColor="@color/accent_green"
+            android:textSize="64sp" />
+
+        <GridView
+            android:id="@+id/artGrid"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_gravity="center|center_horizontal|center_vertical"
+            android:clipToPadding="false"
+            android:columnWidth="156dp"
+            android:descendantFocusability="beforeDescendants"
+            android:elevation="2dp"
+            android:focusable="false"
+            android:gravity="center"
+            android:horizontalSpacing="10dp"
+            android:numColumns="4"
+
+            android:padding="32dp"
+
+            android:stretchMode="spacingWidthUniform"
+            android:verticalSpacing="32dp"
+
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/include" />
+    </LinearLayout>
+
+</LinearLayout>
