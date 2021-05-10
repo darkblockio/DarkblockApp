@@ -8,4 +8,12 @@
     <style name="MyCustomBrowseStyle" parent="Theme.Leanback.Browse">
         <item name="rowHeaderStyle">@style/MyCustomRowHeaderStyle</item>
     </style>
+
+    <style name="BottomNavStyle" parent="Theme.AppCompat.Light.NoActionBar">
+    </style>
+
+    <style name="GalleryCardStyle" parent="Widget.Leanback.ImageCardViewStyle">
+        <item name="lbImageCardViewType">Title|Content</item>
+    </style>
+
 </resources>

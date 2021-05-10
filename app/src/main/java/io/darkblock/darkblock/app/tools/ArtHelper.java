@@ -83,11 +83,11 @@ public class ArtHelper {
         // Get every darkblock (or at least a bunch of them)
         Transaction[] transactions = Transaction.queryTransactions(ALL_DARKBLOCK_QUERY);
         if (transactions != null) {
-            System.err.println( "found " + transactions.length + " nfts" );
+            System.out.println( "found " + transactions.length + " nfts" );
             // Create list of IDs
             HashMap<String, Transaction> map = new HashMap<>();
             for (Transaction t : transactions) {
-                System.err.println( "nft found: " + t.getId() );
+                //System.out.println( "nft found: " + t.getId() );
                 map.put(t.getId(), t);
             }
 
@@ -118,7 +118,7 @@ public class ArtHelper {
                             JSONObject obj = new JSONObject(t.getTag("Input"));
                             newOwner = obj.getString("target");
                             if( newOwner != null ) {
-                                System.err.println( contractId + " is now owned by " + newOwner );
+                                //System.err.println( contractId + " is now owned by " + newOwner );
                             }
                         } catch (JSONException ex) {
                             ex.printStackTrace();
@@ -149,15 +149,17 @@ public class ArtHelper {
                     try {
                         state = new JSONObject(t.getTag("Init-State"));
                     }catch( Exception e ){
-                        e.printStackTrace();
+                        //e.printStackTrace();
+                        System.out.println("Error getting initial state");
                     }
                     String ownerId = t.getTag("Override Owner ID");
-                    if (ownerId == null) {
+                    if (ownerId == null && state != null) {
                         // Get owner ID
                         try {
                             ownerId = state.getJSONObject("balances").keys().next();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
+                        } catch (Exception e) {
+                            //e.printStackTrace();
+                            System.out.println("Cannot find 'balances'!!!");
                         }
                     }
                     // Ok, so do we own this?

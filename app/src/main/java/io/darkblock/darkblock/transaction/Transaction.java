@@ -85,7 +85,7 @@ public class Transaction {
         HttpRequest transactionRequest = HttpRequest
                 .get(ARWEAVE_ENDPOINT,true,"query",params);
         JSONObject result = Util.doJsonRequest(transactionRequest);
-        System.err.println( result );
+        //System.err.println( result );
         if (result != null) {
             try {
                 // Loop over everything

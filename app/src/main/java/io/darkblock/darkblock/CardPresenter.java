@@ -7,12 +7,11 @@ import androidx.core.content.ContextCompat;
 import android.util.Log;
 import android.view.ViewGroup;
 
-import com.bumptech.glide.Glide;
-
 import io.darkblock.darkblock.app.App;
 import io.darkblock.darkblock.app.tools.ArtHelper;
 import io.darkblock.darkblock.app.Artwork;
 import io.darkblock.darkblock.app.tools.ThumbnailLoader;
+import io.darkblock.darkblock.fragment.MainFragment;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.
@@ -82,15 +81,6 @@ public class CardPresenter extends Presenter {
             cardView.setContentText(App.getAppResources().getString(R.string.author_detail,art.getAuthor()));
             // Load image with glide
             ThumbnailLoader.glideLoad(art.getThumbnailImagUrl(),cardView.getMainImageView());
-
-        }else if (item instanceof String && item.equals(App.getAppResources().getString(R.string.view_all))) {
-
-            int worksRemaining = ArtHelper.getArtListSize()-MainFragment.MAX_ITEMS;
-            if (worksRemaining < 0) worksRemaining = 0;
-
-            cardView.setTitleText((String)item);
-            cardView.setContentText(App.getAppResources().getString(R.string.view_all_count,worksRemaining));
-
         }
         Log.d(TAG, "onBindViewHolder");
     }

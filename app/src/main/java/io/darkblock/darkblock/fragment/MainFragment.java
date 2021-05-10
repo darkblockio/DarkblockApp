@@ -1,15 +1,12 @@
-package io.darkblock.darkblock;
+package io.darkblock.darkblock.fragment;
 
 import android.content.Intent;
-import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.media.Image;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.RequiresApi;
-import androidx.core.content.res.ResourcesCompat;
 import androidx.leanback.app.BrowseFragment;
 import androidx.leanback.widget.ArrayObjectAdapter;
 import androidx.leanback.widget.HeaderItem;
@@ -23,31 +20,29 @@ import androidx.core.content.ContextCompat;
 
 import android.os.Handler;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import java.util.List;
 
-import io.darkblock.darkblock.activity.ArtGridActivity;
+import io.darkblock.darkblock.CardPresenter;
+import io.darkblock.darkblock.R;
 import io.darkblock.darkblock.activity.ArtViewActivity;
 import io.darkblock.darkblock.activity.WelcomeActivity;
 import io.darkblock.darkblock.app.App;
 import io.darkblock.darkblock.app.tools.ArtHelper;
 import io.darkblock.darkblock.app.Artwork;
 import io.darkblock.darkblock.app.tools.ArtKeyGenerator;
-import io.darkblock.darkblock.app.tools.TransferManager;
 
 public class MainFragment extends BrowseFragment {
     private static final String TAG = "MainFragment";
 
     private static final int GRID_ITEM_WIDTH = 200;
     private static final int GRID_ITEM_HEIGHT = 200;
-    public static final int MAX_ITEMS = 6;
 
     private static Drawable iconRefresh;
     private static Drawable iconSignout;
+    private static Drawable iconRotate;
 
     private ArtKeyGenerator artKeyGenerator;
 
@@ -65,6 +60,7 @@ public class MainFragment extends BrowseFragment {
 
         iconRefresh = getContext().getDrawable(R.drawable.icon_refresh);
         iconSignout = getContext().getDrawable(R.drawable.icon_logout);
+        iconRotate = getContext().getDrawable(R.drawable.viewall);
 
         // Start retrieving art
         new RetrieveArtTask().execute();
@@ -99,11 +95,8 @@ public class MainFragment extends BrowseFragment {
 
         // Add collection
         ArrayObjectAdapter collectionRowAdapter = new ArrayObjectAdapter(cardPresenter);
-        for (int j = 0; j < Math.min(list.size(),MAX_ITEMS); j++) {
+        for (int j = 0; j < list.size(); j++) {
             collectionRowAdapter.add(list.get(j % list.size()));
-        }
-        if (ArtHelper.getArtListSize() > MAX_ITEMS) {
-            collectionRowAdapter.add(getString(R.string.view_all));
         }
 
         HeaderItem header = new HeaderItem(0, getString(R.string.gallery));
@@ -115,10 +108,9 @@ public class MainFragment extends BrowseFragment {
         GridItemPresenter mGridPresenter = new GridItemPresenter();
         ArrayObjectAdapter gridRowAdapter = new ArrayObjectAdapter(mGridPresenter);
         // Add individual settings
-        //gridRowAdapter.add(getString(R.string.preferences));
         gridRowAdapter.add(iconRefresh);
-        //gridRowAdapter.add(getString(R.string.about));
         gridRowAdapter.add(iconSignout);
+        gridRowAdapter.add(iconRotate);
 
         rowsAdapter.add(new ListRow(gridHeader, gridRowAdapter));
 
@@ -145,14 +137,7 @@ public class MainFragment extends BrowseFragment {
         public void onItemClicked(Presenter.ViewHolder itemViewHolder, Object item,
                                   RowPresenter.ViewHolder rowViewHolder, Row row) {
 
-            if (item instanceof String) {
-                if (item.equals(getString(R.string.view_all))) {
-                    // Show full grid
-                    Intent intent = new Intent(getActivity(), ArtGridActivity.class);
-                    getActivity().startActivity(intent);
-                }
-
-            }else if (item instanceof Artwork) {
+            if (item instanceof Artwork) {
 
                 // Display fullscreen
                 Intent intent = new Intent(getActivity(), ArtViewActivity.class);
@@ -175,6 +160,10 @@ public class MainFragment extends BrowseFragment {
                     // Refresh rows
                     artKeyGenerator.interrupt();
                     new RetrieveArtTask().execute();
+                }else if (item.equals(iconRotate)) {
+                    // Rotate the view
+                    App.rotate();
+                    App.orientActivity(getActivity());
                 }
 
             }

@@ -1,10 +1,14 @@
 package io.darkblock.darkblock.app;
 
+import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -19,6 +23,11 @@ import java.util.NoSuchElementException;
 import java.util.Scanner;
 import java.util.UUID;
 
+import io.darkblock.darkblock.R;
+import io.darkblock.darkblock.activity.ArtViewActivity;
+import io.darkblock.darkblock.activity.FullscreenArtActivity;
+import io.darkblock.darkblock.activity.MainActivity;
+import io.darkblock.darkblock.activity.WelcomeActivity;
 import io.darkblock.darkblock.app.tools.EncryptionTools;
 import io.darkblock.darkblock.app.tools.TransferManager;
 
@@ -53,6 +62,71 @@ public class App extends Application {
     public static Context getAppContext() {
         return context;
     }
+
+
+    /**
+     * Rotate an activity to match out orientation
+     * @param act
+     */
+    public static void orientActivity(Activity act) {
+
+        if (session == null) {
+            return;
+        }
+
+        int orientation = session.getScreenOrientation();
+
+        // NGL this sucks but idk how else to do it
+        View view;
+        if (act instanceof MainActivity) {
+            view = act.findViewById(R.id.root);
+        }else if (act instanceof WelcomeActivity) {
+            view = act.findViewById(R.id.welcome);
+        }else if (act instanceof ArtViewActivity) {
+            view = act.findViewById(R.id.art_view_constraint_layout);
+        }else if (act instanceof FullscreenArtActivity) {
+            view = act.findViewById(R.id.fullscreen_art_constraint_layout);
+        }else{
+            view = null;
+        }
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        act.getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int w = displayMetrics.widthPixels;
+        int h = displayMetrics.heightPixels;
+
+        // Rotate
+        view.setRotation(orientation*90);
+
+        ViewGroup.LayoutParams lp = (ViewGroup.LayoutParams) view.getLayoutParams();
+        if (lp != null) {
+            // Resize the screen
+            if (orientation%2!=0) {
+                lp.height = w;
+                lp.width = h;
+                view.requestLayout();
+
+                view.setTranslationX((w - h) / 2);
+                view.setTranslationY((h - w) / 2);
+            }else{
+                // Default dimensions
+                lp.height = h;
+                lp.width = w;
+                view.requestLayout();
+
+                view.setTranslationX(0);
+                view.setTranslationY(0);
+            }
+        }
+    }
+
+    public static void rotate() {
+        if (session != null) {
+            int orientation = session.getScreenOrientation();
+            session.setScreenOrientation(orientation + 1);
+        }
+    }
+
 
     /**
      * Load a session from storage. Returns true if such a session exists
@@ -228,6 +302,7 @@ public class App extends Application {
 
         private String walletId = null;
         private String resourceUrl = "";
+        private int screenOrientation = 0;
 
         public Session(String walletId) {
             this.walletId = walletId;
@@ -250,6 +325,7 @@ public class App extends Application {
             SharedPreferences.Editor editor = preferences.edit();
 
             editor.putString("walletId",this.walletId);
+            editor.putInt("orientation",screenOrientation);
             editor.apply();
         }
 
@@ -258,10 +334,19 @@ public class App extends Application {
             // Load wallet id
             if (preferences.contains("walletId")) {
                 walletId = preferences.getString("walletId","");
+                screenOrientation = preferences.getInt("orientation",0);
                 this.resourceUrl = "https://"+walletId+".arweave.net/";
                 return walletId.length() > 0;
             }
             return false;
+        }
+
+        public int getScreenOrientation() {
+            return screenOrientation;
+        }
+
+        public void setScreenOrientation(int screenOrientation) {
+            this.screenOrientation = screenOrientation % 4;
         }
     }
 

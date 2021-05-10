@@ -36,6 +36,8 @@ public class ArtViewActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_art_view);
 
+        getActionBar().hide();
+
         // Get the artwork
         int id = getIntent().getIntExtra("ArtId",0);
         artwork = ArtHelper.getArtByNum(id);

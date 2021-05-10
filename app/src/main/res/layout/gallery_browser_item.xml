@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.leanback.widget.ImageCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/image_gallery_item"
+    android:theme="@style/GalleryCardStyle"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content" />
