@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.view.View;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import java.util.List;
 
@@ -44,6 +45,10 @@ public class MainActivity extends Activity {
 
         // Start retrieving art
         new RetrieveArtTask().execute();
+
+        // Setup navigation view
+        BottomNavigationView navigationView = findViewById(R.id.main_navigation);
+
 
         // Setup art poller
         walletUpdateChecker.postDelayed(new Runnable() {

@@ -23,7 +23,7 @@
         android:id="@+id/main_navigation"
         android:layout_width="match_parent"
         android:layout_height="64dp"
-        android:background="@color/secondary_blue"
+        android:background="@color/primary_blue"
         android:theme="@style/BottomNavStyle"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

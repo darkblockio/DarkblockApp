@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -49,6 +50,8 @@ public class ArtViewActivity extends Activity {
         TextView details = findViewById(R.id.artDetails);
 
         title.setText(artwork.getTitle());
+        title.setTextColor(Color.WHITE);
+        details.setTextColor(Color.WHITE);
 
         StringBuilder detailBuilder = new StringBuilder();
         detailBuilder.append(getString(R.string.author_detail,artwork.getAuthor()))

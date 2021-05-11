@@ -34,18 +34,11 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     @Override
     public GalleryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
-        final ImageCardView cardView = new ImageCardView(new ContextThemeWrapper(parent.getContext(), R.style.GalleryCardStyle));
+        //final ImageCardView cardView = new ImageCardView(new ContextThemeWrapper(parent.getContext(), R.style.GalleryCardStyle));
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.gallery_browser_item, parent, false);
 
-        cardView.setMainImageAdjustViewBounds(true);
-        cardView.setMainImageScaleType(ImageView.ScaleType.FIT_CENTER);
-
-        cardView.setCardType(ImageCardView.CARD_TYPE_FLAG_TITLE | ImageCardView.CARD_TYPE_FLAG_CONTENT);
-
-        cardView.setFocusable(true);
-        cardView.setFocusableInTouchMode(true);
-        cardView.setBackgroundColor(App.getAppResources().getColor(R.color.accent_green));
-
-        return new ViewHolder(cardView, (RecyclerView) parent);
+        return new ViewHolder(view, (RecyclerView) parent);
     }
 
     @Override
@@ -94,7 +87,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
     // ViewHolder
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        private final ImageCardView card;
+        private final View mainView;
 
         private final RecyclerView recyclerView;
 
@@ -103,24 +96,21 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
         public ViewHolder(@NonNull View itemView, RecyclerView recyclerView) {
             super(itemView);
-            card = (ImageCardView) itemView;
-            card.setFocusable(true);
+            mainView = itemView;
+            mainView.setFocusable(true);
             this.recyclerView = recyclerView;
         }
 
         public void setArtwork(Artwork artwork) {
-
-            System.out.println(card.getCardType());
-
             this.artwork = artwork;
-            ThumbnailLoader.glideLoadResize(artwork.getThumbnailImagUrl(),card.getMainImageView());
-            card.setTitleText(artwork.getTitle());
-            card.setContentText(artwork.getAuthor());
+            ThumbnailLoader.glideLoadResize(artwork.getThumbnailImagUrl(), (ImageView) mainView.findViewById(R.id.image_gallery_item));
+            ((TextView)mainView.findViewById(R.id.text_art_title)).setText(artwork.getTitle());
+            ((TextView)mainView.findViewById(R.id.text_art_subtitle)).setText(artwork.getAuthor());
         }
         public Artwork getArtwork() {
             return artwork;
         }
-        public View getView() {return card;}
+        public View getView() {return mainView;}
     }
 
 }
