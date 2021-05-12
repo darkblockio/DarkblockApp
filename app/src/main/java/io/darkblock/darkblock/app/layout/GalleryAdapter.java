@@ -25,6 +25,7 @@ import io.darkblock.darkblock.app.tools.ThumbnailLoader;
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
     private final List<Artwork> artworkList;
+    private int scrollAmount = 0;
 
     public GalleryAdapter(List<Artwork> artworkList) {
         this.artworkList = artworkList;
@@ -43,6 +44,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull final GalleryAdapter.ViewHolder holder, int position) {
+        position = position % artworkList.size();
         // Set image
         holder.setArtwork(artworkList.get(position));
 
@@ -51,6 +53,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         holder.getView().setScaleY(0.75f);
 
         // Set on focus listener
+        final int finalPosition = position % artworkList.size();
         holder.getView().setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
@@ -61,9 +64,19 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
                         .scaleY(scale)
                         .setDuration(250);
 
-                // (screen width - width)/2
-                int x = (1920 - v.getWidth())/2;
-                holder.recyclerView.smoothScrollBy((int) (v.getX()-x),0);
+                if (hasFocus) {
+                    // (screen width - width)/2
+                    int x = (1920 - v.getWidth()) / 2;
+                    int dx = (int) (v.getX() - x);
+                    holder.recyclerView.smoothScrollBy(dx, 0);
+
+                    // Next: move the recyclerview
+                    /*int xOff = 0;
+                    if (finalPosition == 0) {
+                        xOff = x;
+                    }
+                    holder.recyclerView.setTranslationX(xOff);*/
+                }
                 // what the FUCK how did that work
             }
         });
@@ -81,7 +94,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
     @Override
     public int getItemCount() {
-        return artworkList.size();
+        return artworkList.size()*10;
     }
 
     // ViewHolder

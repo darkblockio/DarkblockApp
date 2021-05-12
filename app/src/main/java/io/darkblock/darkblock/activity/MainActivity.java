@@ -4,7 +4,11 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -33,6 +37,9 @@ public class MainActivity extends Activity {
     // Used to ensure we don't try and fetch wallet contents twice at ocne
     protected boolean fetching;
 
+    // Navigation
+    private TextView lastFocusedView;
+
     GalleryBrowserFragment fragment;
 
     @Override
@@ -40,14 +47,13 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        setupNavigation();
+
         // The main fragment
         fragment = (GalleryBrowserFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
 
         // Start retrieving art
         new RetrieveArtTask().execute();
-
-        // Setup navigation view
-        BottomNavigationView navigationView = findViewById(R.id.main_navigation);
 
 
         // Setup art poller
@@ -66,6 +72,60 @@ public class MainActivity extends Activity {
         super.onDestroy();
         walletUpdateChecker.removeCallbacksAndMessages(null);
     }
+
+
+    // Setup our navigation stuff
+    private void setupNavigation() {
+
+        final LinearLayout navigation = findViewById(R.id.linear_navigation);
+
+        // Create layout params
+        LinearLayout.LayoutParams optionParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        optionParams.setMarginStart(32);
+        optionParams.setMarginEnd(32);
+
+        // Create listener
+        View.OnFocusChangeListener listener = new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+
+                // Change color
+                TextView textView = (TextView) v;
+                if (lastFocusedView != null) {
+                    lastFocusedView.setTextColor(getResources().getColor(R.color.white));
+                }
+                textView.setTextColor(getResources().getColor(R.color.accent_green));
+
+                // Scroll
+                if (hasFocus) {
+                    int x = (1920 - v.getWidth()) / 2;
+                    int dx = (int) (v.getX() - x);
+
+                    navigation.animate().translationX(-dx).setDuration(300);
+
+                    lastFocusedView = textView;
+                }
+            }
+        };
+
+        // Create buttons
+        for (int i=0;i<3;i++) {
+            // Create navigation item
+            TextView navItem = new TextView(this);
+            navItem.setTextAppearance(R.style.NavigationItem);
+            navItem.setLayoutParams(optionParams);
+            navItem.setText("Option " + i);
+
+            // Set listeners
+            navItem.setFocusable(true);
+            navItem.setOnFocusChangeListener(listener);
+
+            // Add to navigation view
+            navigation.addView(navItem);
+        }
+
+    }
+
 
     // Call this to load artwork into the gallery view
     private void loadGallery() {
