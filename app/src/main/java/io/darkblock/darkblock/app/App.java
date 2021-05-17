@@ -7,6 +7,7 @@ import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.Pair;
 import android.view.View;
 import android.view.ViewGroup;
 
@@ -61,6 +62,22 @@ public class App extends Application {
     }
     public static Context getAppContext() {
         return context;
+    }
+
+
+    /**
+     * Get the width of the display based on app rotation, used for alignment
+     * @return The width of the screen in pixels, relative to the app's orientation
+     */
+    public static int getDisplayWidth() {
+        int orientation = 0;
+        if (session != null) {
+            orientation = session.getScreenOrientation();
+        }
+
+        return (orientation == 0 || orientation == 2) ?
+            Resources.getSystem().getDisplayMetrics().widthPixels :
+                Resources.getSystem().getDisplayMetrics().heightPixels;
     }
 
 

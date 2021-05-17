@@ -24,6 +24,8 @@ import io.darkblock.darkblock.app.tools.ThumbnailLoader;
 
 public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHolder> {
 
+    private static final float DESELECTED_SCALE = 0.85f;
+
     private final List<Artwork> artworkList;
     private int scrollAmount = 0;
 
@@ -49,8 +51,8 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
         holder.setArtwork(artworkList.get(position));
 
         // Set default scale
-        holder.getView().setScaleX(0.75f);
-        holder.getView().setScaleY(0.75f);
+        holder.getView().setScaleX(DESELECTED_SCALE);
+        holder.getView().setScaleY(DESELECTED_SCALE);
 
         // Set on focus listener
         final int finalPosition = position % artworkList.size();
@@ -58,7 +60,7 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
                 // Scale the view
-                float scale = hasFocus ? 1f : 0.75f;
+                float scale = hasFocus ? 1f : DESELECTED_SCALE;
                 v.animate()
                         .scaleX(scale)
                         .scaleY(scale)
@@ -66,16 +68,9 @@ public class GalleryAdapter extends RecyclerView.Adapter<GalleryAdapter.ViewHold
 
                 if (hasFocus) {
                     // (screen width - width)/2
-                    int x = (1920 - v.getWidth()) / 2;
+                    int x = (App.getDisplayWidth() - v.getWidth()) / 2;
                     int dx = (int) (v.getX() - x);
                     holder.recyclerView.smoothScrollBy(dx, 0);
-
-                    // Next: move the recyclerview
-                    /*int xOff = 0;
-                    if (finalPosition == 0) {
-                        xOff = x;
-                    }
-                    holder.recyclerView.setTranslationX(xOff);*/
                 }
                 // what the FUCK how did that work
             }

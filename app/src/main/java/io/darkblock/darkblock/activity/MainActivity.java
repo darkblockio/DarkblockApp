@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
@@ -12,11 +11,10 @@ import android.widget.TextView;
 
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-
 import java.util.List;
 
 import io.darkblock.darkblock.R;
+import io.darkblock.darkblock.app.App;
 import io.darkblock.darkblock.app.Artwork;
 import io.darkblock.darkblock.app.layout.GalleryAdapter;
 import io.darkblock.darkblock.app.tools.ArtHelper;
@@ -28,6 +26,8 @@ import io.darkblock.darkblock.fragment.GalleryBrowserFragment;
  */
 public class MainActivity extends Activity {
 
+    private static final int NUM_TABS = 3;
+
     private ArtKeyGenerator artKeyGenerator;
 
     // Poll every so many seconds for updates to the wallet
@@ -38,7 +38,7 @@ public class MainActivity extends Activity {
     protected boolean fetching;
 
     // Navigation
-    private TextView lastFocusedView;
+    private TextView lastFocusedNavView;
 
     GalleryBrowserFragment fragment;
 
@@ -91,25 +91,25 @@ public class MainActivity extends Activity {
 
                 // Change color
                 TextView textView = (TextView) v;
-                if (lastFocusedView != null) {
-                    lastFocusedView.setTextColor(getResources().getColor(R.color.white));
+                if (lastFocusedNavView != null) {
+                    lastFocusedNavView.setTextColor(getResources().getColor(R.color.white));
                 }
                 textView.setTextColor(getResources().getColor(R.color.accent_green));
 
                 // Scroll
                 if (hasFocus) {
-                    int x = (1920 - v.getWidth()) / 2;
+                    int x = (App.getDisplayWidth() - v.getWidth()) / 2;
                     int dx = (int) (v.getX() - x);
 
                     navigation.animate().translationX(-dx).setDuration(300);
 
-                    lastFocusedView = textView;
+                    lastFocusedNavView = textView;
                 }
             }
         };
 
         // Create buttons
-        for (int i=0;i<3;i++) {
+        for (int i=0;i<NUM_TABS;i++) {
             // Create navigation item
             TextView navItem = new TextView(this);
             navItem.setTextAppearance(R.style.NavigationItem);
