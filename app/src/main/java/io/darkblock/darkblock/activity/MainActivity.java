@@ -1,6 +1,7 @@
 package io.darkblock.darkblock.activity;
 
 import android.app.Activity;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -26,7 +27,8 @@ import io.darkblock.darkblock.fragment.GalleryBrowserFragment;
  */
 public class MainActivity extends Activity {
 
-    private static final int NUM_TABS = 3;
+    private static final int NUM_TABS = 2;
+    private static final String[] TAB_NAMES = {"Gallery","Settings"};
 
     private ArtKeyGenerator artKeyGenerator;
 
@@ -39,6 +41,8 @@ public class MainActivity extends Activity {
 
     // Navigation
     private TextView lastFocusedNavView;
+    private TextView lastSelectedNavView;
+    private boolean navHasFocus;
 
     GalleryBrowserFragment fragment;
 
@@ -85,19 +89,21 @@ public class MainActivity extends Activity {
         optionParams.setMarginEnd(32);
 
         // Create listener
-        View.OnFocusChangeListener listener = new View.OnFocusChangeListener() {
+        View.OnFocusChangeListener focusListener = new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                // Change color
                 TextView textView = (TextView) v;
-                if (lastFocusedNavView != null) {
-                    lastFocusedNavView.setTextColor(getResources().getColor(R.color.white));
-                }
-                textView.setTextColor(getResources().getColor(R.color.accent_green));
 
                 // Scroll
                 if (hasFocus) {
+
+                    // Change color
+                    if (lastFocusedNavView != null) {
+                        lastFocusedNavView.setTextColor(getResources().getColor(R.color.white));
+                    }
+                    textView.setTextColor(getResources().getColor(R.color.accent_green));
+
                     int x = (App.getDisplayWidth() - v.getWidth()) / 2;
                     int dx = (int) (v.getX() - x);
 
@@ -108,20 +114,41 @@ public class MainActivity extends Activity {
             }
         };
 
+        View.OnClickListener clickListener = new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TextView textView = (TextView) v;
+
+                if (lastSelectedNavView != null) {
+                    lastSelectedNavView.setPaintFlags(textView.getPaintFlags());
+                }
+                textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+
+                lastSelectedNavView = textView;
+            }
+        };
+
         // Create buttons
         for (int i=0;i<NUM_TABS;i++) {
             // Create navigation item
             TextView navItem = new TextView(this);
             navItem.setTextAppearance(R.style.NavigationItem);
             navItem.setLayoutParams(optionParams);
-            navItem.setText("Option " + i);
+            navItem.setText(TAB_NAMES[i]);
 
             // Set listeners
             navItem.setFocusable(true);
-            navItem.setOnFocusChangeListener(listener);
+            navItem.setClickable(true);
+            navItem.setOnFocusChangeListener(focusListener);
+            navItem.setOnClickListener(clickListener);
 
             // Add to navigation view
             navigation.addView(navItem);
+
+            if (i == 0) {
+                navItem.callOnClick();
+                navItem.requestFocus();
+            }
         }
 
     }
