@@ -18,6 +18,8 @@ public class WelcomeActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_welcome);
 
+        getActionBar().hide();
+
         // Check if a session already exists
         if (App.tryLoadSession()) {
             // Skip to main screen

@@ -34,7 +34,8 @@ public class FullscreenArtActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_fullscreen_art);
-        System.out.println( "onCreate");
+
+        getActionBar().hide();
 
         // Get the artwork we want
         int artNum = getIntent().getIntExtra("artNum",-1);

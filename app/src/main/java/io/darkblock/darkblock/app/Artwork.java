@@ -20,7 +20,6 @@ import java.util.Objects;
 import java.util.UUID;
 
 import io.darkblock.darkblock.R;
-import io.darkblock.darkblock.app.App;
 
 public class Artwork implements Serializable {
     static final long serialVersionUID = 727566175075960656L;
