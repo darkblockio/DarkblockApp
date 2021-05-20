@@ -8,10 +8,8 @@ import android.util.Log;
 import android.view.ViewGroup;
 
 import io.darkblock.darkblock.app.App;
-import io.darkblock.darkblock.app.tools.ArtHelper;
 import io.darkblock.darkblock.app.Artwork;
 import io.darkblock.darkblock.app.tools.ThumbnailLoader;
-import io.darkblock.darkblock.fragment.MainFragment;
 
 /*
  * A CardPresenter is used to generate Views and bind Objects to them on demand.

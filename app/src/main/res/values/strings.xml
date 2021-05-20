@@ -29,11 +29,13 @@
     <!-- Settings strings -->
     <string name="refresh">Refresh Collection</string>
     <string name="sign_out">Sign Out</string>
-    
+
     <!-- Errors -->
     <string name="error_no_art_specified">No artwork was specified to be loaded</string>
     <string name="error_no_key">Artwork is missing a decryption key</string>
     <string name="error_http">Error grabbing or decrypting information</string>
     <string name="error_image_processing">Unable to process image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>
