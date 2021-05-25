@@ -123,8 +123,8 @@ public class App extends Application {
                 lp.width = h;
                 view.requestLayout();
 
-                view.setTranslationX((w - h) / 2);
-                view.setTranslationY((h - w) / 2);
+                //view.setTranslationX((w - h) / 2);
+                //view.setTranslationY((h - w) / 2);
             }else{
                 // Default dimensions
                 lp.height = h;
