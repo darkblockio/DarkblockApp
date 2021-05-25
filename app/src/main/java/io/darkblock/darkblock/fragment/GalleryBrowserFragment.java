@@ -57,7 +57,7 @@ public class GalleryBrowserFragment extends Fragment {
     public void loadGallery() {
         List<Artwork> list = ArtHelper.getArtworkList();
         if (list == null) return;
-        System.out.println("hello mario");
+        //System.out.println("hello mario");
         View v = getView();
         RecyclerView recyclerView = v.findViewById(R.id.recycler_gallery);
         recyclerView.setAdapter(new GalleryAdapter(list));

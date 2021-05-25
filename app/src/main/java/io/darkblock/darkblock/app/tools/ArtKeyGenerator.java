@@ -47,8 +47,8 @@ public class ArtKeyGenerator extends Thread {
 
                 if (request.ok()) {
                     System.out.println("Generated new key");
-                    System.out.println(uuid.toString());
-                    System.out.println(key);
+                    //System.out.println(uuid.toString());
+                    //System.out.println(key);
                     // Save UUID/key pair
                     App.writeUUIDKeyPair(uuid,key);
                 }

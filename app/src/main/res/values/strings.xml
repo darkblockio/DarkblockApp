@@ -29,6 +29,10 @@
     <!-- Settings strings -->
     <string name="refresh">Refresh Collection</string>
     <string name="sign_out">Sign Out</string>
+    <string name="orientation_landscape">Landscape</string>
+    <string name="orientation_landscape_flipped">Flipped Landscape</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_portrait_flipped">Flipped Portrait</string>
 
     <!-- Errors -->
     <string name="error_no_art_specified">No artwork was specified to be loaded</string>

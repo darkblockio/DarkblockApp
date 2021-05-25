@@ -5,10 +5,55 @@
     android:layout_height="match_parent"
     tools:context=".fragment.SettingsFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_margin="64dp"
+        android:orientation="vertical">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/buttonOrientationLandscape"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/orientation_landscape" />
+
+            <Button
+                android:id="@+id/buttonOrientationPortrait"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/orientation_portrait" />
+
+            <Button
+                android:id="@+id/buttonOrientationLandscapeFlipped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/orientation_landscape_flipped" />
+
+            <Button
+                android:id="@+id/buttonOrientationPortraitFlipped"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/orientation_portrait_flipped" />
+
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/button_logout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="128dp"
+            android:layout_marginEnd="128dp"
+            android:text="Sign Out" />
+
+    </LinearLayout>
 </FrameLayout>

@@ -1,6 +1,7 @@
 package io.darkblock.darkblock.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -129,13 +130,14 @@ public class MainActivity extends FragmentActivity {
                 // Navigate to the correct fragment
                 FragmentManager fm = getSupportFragmentManager();
                 FragmentTransaction transaction = fm.beginTransaction();
-                transaction.replace(R.id.main_fragment,navTab.makeFragment());
-                transaction.addToBackStack("name");
+
+                transaction.addToBackStack(null);
                 transaction.setReorderingAllowed(true);
+                transaction.replace(R.id.main_fragment,navTab.makeFragment());
 
                 transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 
-                transaction.commit();;
+                transaction.commit();
 
                 lastSelectedNavView = navTab;
             }
@@ -163,9 +165,23 @@ public class MainActivity extends FragmentActivity {
 
             if (i == 0) {
                 defaultSelectedNavTab = navItem;
+                defaultSelectedNavTab.requestFocus();
+                defaultSelectedNavTab.callOnClick();
             }
         }
 
+    }
+
+    public void closeSession() {
+        App.destroySession();
+
+        artKeyGenerator.interrupt();
+        artKeyGenerator = null;
+
+        Intent i = new Intent(this, WelcomeActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        finish();
+        startActivity(i);
     }
 
     void loadGallery() {
@@ -201,6 +217,7 @@ public class MainActivity extends FragmentActivity {
             }
         }
     }
+
 
     /**
      * Used to check if the number of works in a wallet has changed

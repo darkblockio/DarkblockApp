@@ -6,13 +6,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
+    android:background="@color/primary_dark"
     tools:context=".activity.MainActivity"
     tools:deviceIds="tv"
     tools:ignore="MergeRootFrame">
 
-    <fragment
+    <FrameLayout
         android:id="@+id/main_fragment"
-        android:name="io.darkblock.darkblock.fragment.GalleryBrowserFragment"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/navigation_parent"
