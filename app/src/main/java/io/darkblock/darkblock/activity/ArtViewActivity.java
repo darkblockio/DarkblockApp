@@ -30,6 +30,8 @@ import io.darkblock.darkblock.app.tools.ThumbnailLoader;
 
 public class ArtViewActivity extends Activity {
 
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMMM d, yyy");
+
     private Artwork artwork;
 
     @Override
@@ -55,6 +57,8 @@ public class ArtViewActivity extends Activity {
 
         StringBuilder detailBuilder = new StringBuilder();
         detailBuilder.append(getString(R.string.author_detail,artwork.getAuthor()))
+                .append("\n")
+                .append(formatter.format(artwork.getCreationDate()))
                 .append("\n\n")
                 .append(artwork.getDescription());
 
@@ -76,6 +80,8 @@ public class ArtViewActivity extends Activity {
                 startActivity(i);
             }
         });
+
+        App.orientActivity(this);
     }
 
     /**
