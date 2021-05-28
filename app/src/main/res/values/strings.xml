@@ -29,11 +29,17 @@
     <!-- Settings strings -->
     <string name="refresh">Refresh Collection</string>
     <string name="sign_out">Sign Out</string>
-    
+    <string name="orientation_landscape">Landscape</string>
+    <string name="orientation_landscape_flipped">Flipped Landscape</string>
+    <string name="orientation_portrait">Portrait</string>
+    <string name="orientation_portrait_flipped">Flipped Portrait</string>
+
     <!-- Errors -->
     <string name="error_no_art_specified">No artwork was specified to be loaded</string>
     <string name="error_no_key">Artwork is missing a decryption key</string>
     <string name="error_http">Error grabbing or decrypting information</string>
     <string name="error_image_processing">Unable to process image</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 </resources>

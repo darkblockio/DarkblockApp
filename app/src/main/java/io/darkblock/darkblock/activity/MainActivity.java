@@ -1,6 +1,7 @@
 package io.darkblock.darkblock.activity;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -10,6 +11,10 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.List;
@@ -17,15 +22,17 @@ import java.util.List;
 import io.darkblock.darkblock.R;
 import io.darkblock.darkblock.app.App;
 import io.darkblock.darkblock.app.Artwork;
+import io.darkblock.darkblock.app.NavTab;
 import io.darkblock.darkblock.app.layout.GalleryAdapter;
 import io.darkblock.darkblock.app.tools.ArtHelper;
 import io.darkblock.darkblock.app.tools.ArtKeyGenerator;
 import io.darkblock.darkblock.fragment.GalleryBrowserFragment;
+import io.darkblock.darkblock.fragment.SettingsFragment;
 
 /*
  * Main Activity class that loads {@link MainFragment}.
  */
-public class MainActivity extends Activity {
+public class MainActivity extends FragmentActivity {
 
     private static final int NUM_TABS = 2;
     private static final String[] TAB_NAMES = {"Gallery","Settings"};
@@ -40,11 +47,10 @@ public class MainActivity extends Activity {
     protected boolean fetching;
 
     // Navigation
-    private TextView lastFocusedNavView;
-    private TextView lastSelectedNavView;
-    private boolean navHasFocus;
+    private NavTab lastFocusedNavView;
+    private NavTab lastSelectedNavView;
 
-    GalleryBrowserFragment fragment;
+    private NavTab defaultSelectedNavTab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,13 +58,10 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         setupNavigation();
-
-        // The main fragment
-        fragment = (GalleryBrowserFragment) getFragmentManager().findFragmentById(R.id.main_fragment);
+        defaultSelectedNavTab.requestFocus();
 
         // Start retrieving art
         new RetrieveArtTask().execute();
-
 
         // Setup art poller
         walletUpdateChecker.postDelayed(new Runnable() {
@@ -93,23 +96,23 @@ public class MainActivity extends Activity {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
 
-                TextView textView = (TextView) v;
+                NavTab navTab = (NavTab) v;
+
+                // Change color
+                if (lastFocusedNavView != null) {
+                    lastFocusedNavView.setTextColor(getResources().getColor(R.color.white));
+                }
 
                 // Scroll
                 if (hasFocus) {
-
-                    // Change color
-                    if (lastFocusedNavView != null) {
-                        lastFocusedNavView.setTextColor(getResources().getColor(R.color.white));
-                    }
-                    textView.setTextColor(getResources().getColor(R.color.accent_green));
+                    navTab.setTextColor(getResources().getColor(R.color.accent_green));
 
                     int x = (App.getDisplayWidth() - v.getWidth()) / 2;
                     int dx = (int) (v.getX() - x);
 
                     navigation.animate().translationX(-dx).setDuration(300);
 
-                    lastFocusedNavView = textView;
+                    lastFocusedNavView = navTab;
                 }
             }
         };
@@ -117,28 +120,43 @@ public class MainActivity extends Activity {
         View.OnClickListener clickListener = new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TextView textView = (TextView) v;
+                NavTab navTab = (NavTab) v;
 
                 if (lastSelectedNavView != null) {
-                    lastSelectedNavView.setPaintFlags(textView.getPaintFlags());
+                    lastSelectedNavView.setPaintFlags(navTab.getPaintFlags());
                 }
-                textView.setPaintFlags(textView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                navTab.setPaintFlags(navTab.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
 
-                lastSelectedNavView = textView;
+                // Navigate to the correct fragment
+                FragmentManager fm = getSupportFragmentManager();
+                FragmentTransaction transaction = fm.beginTransaction();
+
+                transaction.addToBackStack(null);
+                transaction.setReorderingAllowed(true);
+                transaction.replace(R.id.main_fragment,navTab.makeFragment());
+
+                transaction.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+
+                transaction.commit();
+
+                lastSelectedNavView = navTab;
             }
         };
 
         // Create buttons
         for (int i=0;i<NUM_TABS;i++) {
             // Create navigation item
-            TextView navItem = new TextView(this);
-            navItem.setTextAppearance(R.style.NavigationItem);
+            final int x = i;
+            NavTab navItem = new NavTab(this) {
+                @Override
+                public androidx.fragment.app.Fragment makeFragment() {
+                    return x == 0 ? new GalleryBrowserFragment() : new SettingsFragment();
+                }
+            };
             navItem.setLayoutParams(optionParams);
             navItem.setText(TAB_NAMES[i]);
 
             // Set listeners
-            navItem.setFocusable(true);
-            navItem.setClickable(true);
             navItem.setOnFocusChangeListener(focusListener);
             navItem.setOnClickListener(clickListener);
 
@@ -146,24 +164,30 @@ public class MainActivity extends Activity {
             navigation.addView(navItem);
 
             if (i == 0) {
-                navItem.callOnClick();
-                navItem.requestFocus();
+                defaultSelectedNavTab = navItem;
+                defaultSelectedNavTab.requestFocus();
+                defaultSelectedNavTab.callOnClick();
             }
         }
 
     }
 
+    public void closeSession() {
+        App.destroySession();
 
-    // Call this to load artwork into the gallery view
-    private void loadGallery() {
-        List<Artwork> list = ArtHelper.getArtworkList();
-        System.out.println(fragment);
-        if (list == null || fragment == null) return;
+        artKeyGenerator.interrupt();
+        artKeyGenerator = null;
 
-        View v = fragment.getView();
-        RecyclerView recyclerView = v.findViewById(R.id.recycler_gallery);
-        recyclerView.setAdapter(new GalleryAdapter(list));
-        recyclerView.requestFocus();
+        Intent i = new Intent(this, WelcomeActivity.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        finish();
+        startActivity(i);
+    }
+
+    void loadGallery() {
+        if (GalleryBrowserFragment.getInstance() != null) {
+            GalleryBrowserFragment.getInstance().loadGallery();
+        }
     }
 
     /**
@@ -193,6 +217,7 @@ public class MainActivity extends Activity {
             }
         }
     }
+
 
     /**
      * Used to check if the number of works in a wallet has changed
